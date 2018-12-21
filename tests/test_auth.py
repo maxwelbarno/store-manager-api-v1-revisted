@@ -101,13 +101,29 @@ class UserTestCase(BaseTestCase):
             response['message'] == "'password' key missing")
 
 
-    def test_create_user_with_blank_value(self):
+    def test_create_user_with_blank_email_value(self):
         # """ Test API cannnot create a user using blank values """
-        resp = user_registration(self, test_blank_value_user)
+        resp = user_registration(self, user_with_blank_email_value)
         self.assertEqual(resp.status_code, 400)
         response = json.loads(resp.data.decode())
         self.assertTrue(
-            response['message'] == "Sorry, there's an empty user value, please check your input values")
+            response['message'] == "Sorry, email value is blank")
+
+    def test_create_user_with_blank_is_admin_value(self):
+        # """ Test API cannnot create a user using blank values """
+        resp = user_registration(self, user_with_blank_is_admin_value)
+        self.assertEqual(resp.status_code, 400)
+        response = json.loads(resp.data.decode())
+        self.assertTrue(
+            response['message'] == "Sorry, is_admin value is blank")
+
+    def test_create_user_with_blank_password_value(self):
+        # """ Test API cannnot create a user using blank values """
+        resp = user_registration(self, user_with_blank_password_value)
+        self.assertEqual(resp.status_code, 400)
+        response = json.loads(resp.data.decode())
+        self.assertTrue(
+            response['message'] == "Sorry, password value is blank")
 
     def test_create_user_with_invalid_email(self):
         # """ Test API cannnot create a user using an invalid email address """

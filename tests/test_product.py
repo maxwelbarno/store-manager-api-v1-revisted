@@ -56,17 +56,29 @@ class ProductTestCase(BaseTestCase):
         response = json.loads(resp.data.decode())
         self.assertTrue(response['message'] == "'unit_price' key missing")
 
-    def test_create_product_with_an_empty_value(self):
-        # """ Test API cannot create a product with an empty value """
-        users.clear()
-        user_registration(self, test_admin_user)
-        admin_login = user_login(self, admin_user_login)
-        response_content = json.loads(admin_login.data.decode('utf-8'))
-        token = response_content["access_token"]
-        resp = resp = create_product(self, product_with_an_empty_value, token)
-        self.assertEqual(resp.status_code, 400)
-        response = json.loads(resp.data.decode())
-        self.assertTrue(response['message'] == "Sorry, there's an empty value, please check your input values")
+    # def test_create_product_with_an_empty_value(self):
+    #     # """ Test API cannot create a product with an empty value """
+    #     users.clear()
+    #     user_registration(self, test_admin_user)
+    #     admin_login = user_login(self, admin_user_login)
+    #     response_content = json.loads(admin_login.data.decode('utf-8'))
+    #     token = response_content["access_token"]
+    #     resp = resp = create_product(self, product_with_an_empty_value, token)
+    #     self.assertEqual(resp.status_code, 400)
+    #     response = json.loads(resp.data.decode())
+    #     self.assertTrue(response['message'] == "Sorry, there's an empty value, please check your input values")
+
+    # def test_create_product_with_blank_product_name_value(self):
+    #     # """ Test API cannot create a product with an empty value """
+    #     users.clear()
+    #     user_registration(self, test_admin_user)
+    #     admin_login = user_login(self, admin_user_login)
+    #     response_content = json.loads(admin_login.data.decode('utf-8'))
+    #     token = response_content["access_token"]
+    #     resp = resp = create_product(self, product_with_blank_product_name_value, token)
+    #     self.assertEqual(resp.status_code, 400)
+    #     response = json.loads(resp.data.decode())
+    #     self.assertTrue(response['message'] == "Sorry, there's an empty value, please check your input values")
 
     def test_create_product_with_non_string_product_name(self):
         # """ Test API cannot create a product with a non-string product_name """
