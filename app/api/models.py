@@ -65,6 +65,11 @@ class User:
     @staticmethod
     def verify_hash(password, hash):
         return sha256.verify(password, hash)
+    
+    def search(email, password): 
+        for user in users: 
+            if user['email'] == email and User.verify_hash(password, user['password']):
+                return user
 
 
 class Product:

@@ -13,17 +13,14 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     """Configurations for Development"""
-    DEBUG = False
-
-# Testing configrations
+    DEBUG = True
+    TESTING = False
 
 
 class TestingConfig(Config):
     """Configurations for Testing, with a separate test database"""
     TESTING = True
     DEBUG = True
-
-# staging setting
 
 
 class StagingConfig(Config):

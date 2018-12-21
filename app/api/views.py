@@ -65,7 +65,7 @@ class Register(Resource):
                 email, is_admin, User.generate_hash(password))
             return make_response(jsonify({"message": "User {} was created".format(email), }), 201)
         except KeyError as error:
-            return make_response(jsonify(str(error)+" key missing"), 400)
+            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     def get(self):
         if len(users) > 0:
@@ -82,18 +82,16 @@ class Login(Resource):
             data = request.get_json()
             email = data['email']
             password = data['password']
-            for user in users:
-                if email == user['email'] and User.verify_hash(password, user['password']):
-                    access_token = create_access_token(
-                        identity=user['is_admin'])
-                    return make_response(jsonify({
-                        'message': 'Welcome {}'.format(email),
-                        "access_token": access_token
-                    }))
-                return make_response(jsonify({'message': 'wrong credentials'}), 200)
-            return make_response(jsonify({'message': 'User does not exist, please register'}), 200)
+            user = User.search(email, password)
+            if user:
+                access_token = create_access_token(identity=user['is_admin'])
+                return make_response(jsonify({
+                    'message': 'Welcome {}'.format(email),
+                    "access_token": access_token
+                }))
+            return make_response(jsonify({'message': 'wrong credentials'}), 200)
         except KeyError as error:
-            return make_response(jsonify(str(error)+" key missing"), 400)
+            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
 
 class Logout(Resource):
@@ -115,6 +113,7 @@ class Products(Resource):
 
     @admin_required
     def post(self):
+        """ Only admin can add a product """
         try:
             data = request.get_json()
             product_name = data['product_name']
@@ -130,7 +129,7 @@ class Products(Resource):
                 product_name, quantity, unit_price, category)
             return make_response(jsonify(new_product), 201)
         except KeyError as error:
-            return make_response(jsonify(str(error)+" key missing"), 400)
+            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     @jwt_required
     def get(self):
@@ -181,7 +180,7 @@ class UpdateProduct(Resource):
             updated_product = self.products.update_product(
                 product_name, quantity, unit_price, category)
         except KeyError as error:
-            return make_response(jsonify(str(error)+" key missing"), 400)
+            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
         return make_response(jsonify({'message': 'update successful!', 'product': updated_product}), 200)
 
@@ -228,7 +227,7 @@ class Sales(Resource):
             else:
                 return make_response(jsonify({'message': 'Warning! You are attempting to sale a non-existent product'}), 200)
         except KeyError as error:
-            return make_response(jsonify(str(error)+" key missing"), 400)
+            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     @admin_required
     def get(self):

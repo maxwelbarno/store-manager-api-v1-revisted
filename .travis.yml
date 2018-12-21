@@ -9,7 +9,7 @@ install:
 
 # run pytest and coveralls script
 script:
-  - pytest --cov=app test.py
+  - pytest --cov=app tests/
 
 # then post the results to coveralls
 after_success:

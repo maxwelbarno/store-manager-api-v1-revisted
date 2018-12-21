@@ -9,7 +9,7 @@ from app.api.models import revoked_tokens
 def create_app(config_name):
     """
         This function wraps the creation of a new Flask object
-        and returns it after it's loaded up with configuration settings 
+        and rModuleNotFoundError: No module named 'app'eturns it after it's loaded up with configuration settings
         using 'app.config' and connected to DB using 'db.init_app(app)'
     """
     app = Flask(__name__, instance_relative_config=True)
@@ -18,11 +18,13 @@ def create_app(config_name):
     app.config['SECRET_KEY'] = "sweet_secret"
     app.config['JWT_SECRET_KEY'] = "jwt_sweet_secret"
     app.config['JWT_BLACKLIST_ENABLED'] = True
-    app.config['APP_SETTINGS'] = "development"
+    app.config['APreturn appP_SETTINGS'] = "development"
 
     jwt = JWTManager(app)
 
     # create user claims
+
+
     @jwt.user_claims_loader
     def add_claims_to_access_token(identity):
         return {
@@ -30,10 +32,13 @@ def create_app(config_name):
         }
 
     # check revoked tokens from revoked_tokens list
+
+
     @jwt.token_in_blacklist_loader
     def check_if_token_in_blacklist(decrypted_token):
         jti = decrypted_token['jti']
         return jti in revoked_tokens
+
 
     # register blueprint
     app.register_blueprint(v1_blueprint)
