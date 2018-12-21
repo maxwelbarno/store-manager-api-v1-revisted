@@ -67,11 +67,11 @@ class Register(Resource):
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
-    def get(self):
-        if len(users) > 0:
-            return make_response(jsonify(self.user.get_all_users()), 200)
-        else:
-            return make_response(jsonify({'message': 'No user record(s) available'}), 200)
+    # def get(self):
+    #     if len(users) > 0:
+    #         return make_response(jsonify(self.user.get_all_users()), 200)
+    #     else:
+    #         return make_response(jsonify({'message': 'No user record(s) available'}), 200)
 
 
 class Login(Resource):
@@ -98,11 +98,12 @@ class Logout(Resource):
 
     @jwt_required
     def post(self):
-        try:
-            revoked_tokens.append(get_raw_jwt()["jti"])
-            return {"message": "Successfully logged out"}, 200
-        except:
-            return {"message": "Something went wrong"}, 500
+        revoked_tokens.append(get_raw_jwt()["jti"])
+        return {"message": "Successfully logged out"}, 200
+        # try:
+            
+        # except:
+        #     return {"message": "Something went wrong"}, 500
 
 
 class Products(Resource):
@@ -135,7 +136,7 @@ class Products(Resource):
     def get(self):
         """ Admin/store attendant can get all products """
         if len(products) > 0:
-            return make_response(jsonify(self.products.get_all_products()), 200)
+            return make_response(jsonify({'message': 'Success','products': self.products.get_all_products()}), 200)
         else:
             return make_response(jsonify({'message': 'No product record(s) available'}), 200)
 
@@ -216,6 +217,7 @@ class Sales(Resource):
             sale_data.validate()
 
             if Sale.get_unit_price(product_id):
+        # self.assertEqual(resp.status_code, 400)
 
                 new_sale = self.sale.make_sale(product_id, quantity)
 
@@ -247,6 +249,6 @@ class GetSpecificSale(Resource):
     def get(self, sale_id):
         sale = self.sale.get_specific_sale(sale_id)
         if sale:
-            return make_response(jsonify(sale), 200)
+            return make_response(jsonify({'message': 'Success','sale': sale}), 200)
         else:
             return make_response(jsonify({'message': 'Sorry, sale record does not exist'}), 400)

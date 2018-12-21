@@ -19,6 +19,15 @@ class UserTestCase(BaseTestCase):
         # """ Test API can create user """
         resp = user_login(self, admin_user_login)
         self.assertEqual(resp.status_code, 200)
+
+    def test_wrong_login(self):
+        # """ Test API can create user """
+        users.clear()
+        user_registration(self, test_admin_user)
+        resp = user_login(self, wrong_user_login)
+        self.assertEqual(resp.status_code, 200)
+        response_data = json.loads(resp.data.decode())
+        self.assertEqual(response_data['message'], "wrong credentials")
     
     def test_admin_logout(self):
         # """ Test API cannot allow an admin user make a sale """
@@ -83,6 +92,13 @@ class UserTestCase(BaseTestCase):
         response = json.loads(resp.data.decode())
         self.assertTrue(
             response['message'] == "'email' key missing")
+
+    def test_login_with_missing_password_key(self):
+        user_registration(self, user_without_email_key)
+        resp = user_login(self, user_login_without_password_key)
+        response = json.loads(resp.data.decode())
+        self.assertTrue(
+            response['message'] == "'password' key missing")
 
 
     def test_create_user_with_blank_value(self):

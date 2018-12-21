@@ -54,9 +54,9 @@ class User:
         self.users.append(user)
         return user
 
-    def get_all_users(self):
-        """ get all users method """
-        return users
+    # def get_all_users(self):
+    #     """ get all users method """
+    #     return users
 
     @staticmethod
     def generate_hash(password):

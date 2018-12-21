@@ -7,6 +7,7 @@ test_admin_user = json.dumps(dict(
     password="test123"
 ))
 
+
 test_attendant_user = json.dumps(dict(
     email='attendant@test.com',
     is_admin=False,
@@ -40,6 +41,11 @@ test_short_password = json.dumps(dict(
 admin_user_login = json.dumps(dict(
     email='admin@test.com',
     password="test123"
+))
+
+wrong_user_login = json.dumps(dict(
+    email='admin@test.com',
+    password="test"
 ))
 
 attendant_user_login = json.dumps(dict(
@@ -122,7 +128,34 @@ sale = json.dumps(dict(
     product_id=1,
     quantity=10
 ))
-# key errorx
+
+insufficient_product_sale = json.dumps(dict(
+    product_id=1,
+    quantity=101
+))
+
+sale_with_blank_value = json.dumps(dict(
+    product_id=1,
+    quantity=""
+))
+
+sale_with_non_int_product_id_value = json.dumps(dict(
+    product_id="one",
+    quantity=10
+))
+
+sale_with_non_int_quantity_value = json.dumps(dict(
+    product_id=1,
+    quantity="ten"
+))
+
+sale_with_non_positive_quantity_value = json.dumps(dict(
+    product_id=1,
+    quantity=-1
+))
+
+
+# key errors
 user_without_password_key = json.dumps(dict(
     email='admin@test.com',
     is_admin=True
@@ -164,4 +197,40 @@ product_without_product_name_key = json.dumps(dict(
     category='beverages',
     quantity=100,
     unit_price=50.00
+))
+
+user_login_without_password_key = json.dumps(dict(
+    email='admin@test.com'
+))
+
+update_product_without_product_name_key = json.dumps(dict(
+    category='beverages',
+    quantity=100,
+    unit_price=50.00
+))
+
+update_product_without_category_key = json.dumps(dict(
+    product_name='coffee',
+    quantity=100,
+    unit_price=50.00
+))
+
+update_product_without_quantity_key = json.dumps(dict(
+    category='beverages',
+    product_name='coffee',
+    unit_price=50.00
+))
+
+update_product_without_price_key = json.dumps(dict(
+    category='beverages',
+    product_name='coffee',
+    quantity=100,
+))
+
+sale_product_without_quantity_key = json.dumps(dict(
+    product_id=1
+))
+
+sale_product_without_product_id_key = json.dumps(dict(
+    quantity=10
 ))
