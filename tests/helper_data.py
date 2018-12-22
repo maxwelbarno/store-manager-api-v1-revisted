@@ -14,22 +14,10 @@ test_attendant_user = json.dumps(dict(
     password="test123"
 ))
 
-user_with_blank_email_value = json.dumps(dict(
+test_blank_value_user = json.dumps(dict(
     email='',
     is_admin=True,
     password="test123"
-))
-
-user_with_blank_is_admin_value = json.dumps(dict(
-    email='attendant@test.com',
-    is_admin='',
-    password="test123"
-))
-
-user_with_blank_password_value = json.dumps(dict(
-    email='attendant@test.com',
-    is_admin=True,
-    password=''
 ))
 
 test_invalid_email_user = json.dumps(dict(
@@ -73,36 +61,12 @@ product = json.dumps(dict(
     unit_price=50.00
 ))
 
-product_with_blank_category_value = json.dumps(dict(
+product_with_an_empty_value = json.dumps(dict(
     product_id=1,
     category='',
     product_name='coffee',
     quantity=100,
     unit_price=50.00
-))
-
-product_with_blank_product_name_value = json.dumps(dict(
-    product_id=1,
-    category='beverages',
-    product_name='',
-    quantity=100,
-    unit_price=50.00
-))
-
-product_with_blank_quantity_value = json.dumps(dict(
-    product_id=1,
-    category='beverages',
-    product_name='coffee',
-    quantity='',
-    unit_price=50.00
-))
-
-product_with_blank_price_value = json.dumps(dict(
-    product_id=1,
-    category='',
-    product_name='coffee',
-    quantity=100,
-    unit_price=''
 ))
 
 product_with_non_string_product_name = json.dumps(dict(

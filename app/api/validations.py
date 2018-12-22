@@ -12,16 +12,8 @@ class ValidateRegistration:
         self.password = password
 
     def validate(self):
-        if self.email == "":
-            message = "Sorry, email value is blank"
-            abort(400, message)
-
-        if self.is_admin == "":
-            message = "Sorry, is_admin value is blank"
-            abort(400, message)
-
-        if self.password == "":
-            message = "Sorry, password value is blank"
+        if self.email == "" or self.is_admin == "" or self.password == "":
+            message = "Sorry, there's an empty user value, please check your input values"
             abort(400, message)
 
         for user in users:
@@ -81,20 +73,8 @@ class ValidateProduct:
                 message = "Sorry, such a product already exists, please confirm its category"
                 abort(400, message)
 
-        if self.product_name == "": 
-            message = "Sorry, product_name value is empty"
-            abort(400, message)
-
-        if self.quantity == "": 
-            message = "Sorry, quantity value is empty"
-            abort(400, message)
-        
-        if self.unit_price == "": 
-            message = "Sorry, unit_price value is empty"
-            abort(400, message)
-
-        if self.category == "": 
-            message = "Sorry, category value is empty"
+        if self.product_name == "" or self.quantity == "" or self.unit_price == "" or self.category == "":
+            message = "Sorry, there's an empty value, please check your input values"
             abort(400, message)
 
         if type(self.product_name) != str:
