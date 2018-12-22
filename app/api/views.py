@@ -16,10 +16,12 @@ from flask_jwt_extended import (
 
 def registration_data(email, is_admin, password):
     email = email
-    is_admin=is_admin
-    password=password
+    is_admin = is_admin
+    password = password
     user_data = ValidateRegistration(email, is_admin, password)
-    return user_data.validate()
+    user_data.validate()
+    new_user = User.create_user(email, is_admin, User.generate_hash(password))
+    return new_user
 
 def admin_required(fn):
 
@@ -60,8 +62,6 @@ class Register(Resource):
         data = request.get_json()
         try:
             registration_data(data['email'], data['is_admin'], data['password'])
-            new_user = self.user.create_user(
-                data['email'], data['is_admin'], User.generate_hash(data['password']))
             return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
