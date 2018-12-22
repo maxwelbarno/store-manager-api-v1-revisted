@@ -14,6 +14,12 @@ from flask_jwt_extended import (
     get_raw_jwt
 )
 
+def registration_data(email, is_admin, password):
+    email = email
+    is_admin=is_admin
+    password=password
+    user_data = ValidateRegistration(email, is_admin, password)
+    return user_data.validate()
 
 def admin_required(fn):
 
@@ -53,18 +59,7 @@ class Register(Resource):
     def post(self):
         data = request.get_json()
         try:
-            # email = data['email']
-            # is_admin = data['is_admin']
-            # password = data['password']
-
-            user_data = ValidateRegistration(
-                data['email'], data['is_admin'], data['password'])
-            user_data.validate()
-
-            # user_data = ValidateRegistration(
-            #     email, is_admin, password)
-            # user_data.validate()
-
+            registration_data(data['email'], data['is_admin'], data['password'])
             new_user = self.user.create_user(
                 data['email'], data['is_admin'], User.generate_hash(data['password']))
             return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
@@ -169,7 +164,6 @@ class UpdateProduct(Resource):
     @jwt_required
     def put(self, product_id):
         product = self.products.get_specific_product(product_id)
-
         data = request.get_json()
 
         try:
@@ -177,11 +171,9 @@ class UpdateProduct(Resource):
             category = data['category']
             quantity = data['quantity']
             unit_price = data['unit_price']
-
             product_data = ValidateProduct(
                 product_name, quantity, unit_price, category)
             product_data.validate()
-
             updated_product = self.products.update_product(
                 product_name, quantity, unit_price, category)
         except KeyError as error:
@@ -221,13 +213,9 @@ class Sales(Resource):
             sale_data.validate()
 
             if Sale.get_unit_price(product_id):
-        # self.assertEqual(resp.status_code, 400)
-
                 new_sale = self.sale.make_sale(product_id, quantity)
-
                 if new_sale:
                     return make_response(jsonify(new_sale), 201)
-
                 else:
                     return make_response(jsonify({'message': 'Insufficient stock'}), 200)
             else:
