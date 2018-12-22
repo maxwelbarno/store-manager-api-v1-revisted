@@ -14,16 +14,6 @@ from flask_jwt_extended import (
     get_raw_jwt
 )
 
-def registration_data(email, is_admin, password, user):
-    email = email
-    is_admin = is_admin
-    password = password
-    user = user
-    user_data = ValidateRegistration(email, is_admin, password)
-    user_data.validate()
-    new_user = user.create_user(email, is_admin, user.generate_hash(password))
-    return new_user
-        
 
 def admin_required(fn):
 
@@ -61,10 +51,19 @@ class Register(Resource):
         self.user = User()
 
     def post(self):
-        data = request.get_json()
         try:
-            if registration_data(data['email'], data['is_admin'], data['password'], self.user):
-                return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
+            data = request.get_json()
+            email = data['email']
+            is_admin = data['is_admin']
+            password = data['password']
+
+            user_data = ValidateRegistration(
+                email, is_admin, password)
+            user_data.validate()
+
+            new_user = self.user.create_user(
+                email, is_admin, User.generate_hash(password))
+            return make_response(jsonify({"message": "User {} was created".format(email), }), 201)
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
@@ -166,6 +165,7 @@ class UpdateProduct(Resource):
     @jwt_required
     def put(self, product_id):
         product = self.products.get_specific_product(product_id)
+
         data = request.get_json()
 
         try:
@@ -173,9 +173,11 @@ class UpdateProduct(Resource):
             category = data['category']
             quantity = data['quantity']
             unit_price = data['unit_price']
+
             product_data = ValidateProduct(
                 product_name, quantity, unit_price, category)
             product_data.validate()
+
             updated_product = self.products.update_product(
                 product_name, quantity, unit_price, category)
         except KeyError as error:
@@ -215,9 +217,13 @@ class Sales(Resource):
             sale_data.validate()
 
             if Sale.get_unit_price(product_id):
+        # self.assertEqual(resp.status_code, 400)
+
                 new_sale = self.sale.make_sale(product_id, quantity)
+
                 if new_sale:
                     return make_response(jsonify(new_sale), 201)
+
                 else:
                     return make_response(jsonify({'message': 'Insufficient stock'}), 200)
             else:
