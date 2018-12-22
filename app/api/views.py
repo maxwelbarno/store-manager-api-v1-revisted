@@ -51,15 +51,19 @@ class Register(Resource):
         self.user = User()
 
     def post(self):
+        data = request.get_json()
         try:
-            data = request.get_json()
-            email = data['email']
-            is_admin = data['is_admin']
-            password = data['password']
+            # email = data['email']
+            # is_admin = data['is_admin']
+            # password = data['password']
 
             user_data = ValidateRegistration(
-                email, is_admin, password)
+                data['email'], data['is_admin'], data['password'])
             user_data.validate()
+
+            # user_data = ValidateRegistration(
+            #     email, is_admin, password)
+            # user_data.validate()
 
             new_user = self.user.create_user(
                 email, is_admin, User.generate_hash(password))
