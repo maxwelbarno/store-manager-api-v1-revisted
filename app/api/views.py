@@ -57,9 +57,9 @@ class Register(Resource):
             is_admin = data['is_admin']
             password = data['password']
 
-            # user_data = ValidateRegistration(
-            #     email, is_admin, password)
-            validate(email, is_admin, password)
+            user_data = ValidateRegistration(
+                email, is_admin, password)
+            user_data.validate()
 
             new_user = self.user.create_user(
                 email, is_admin, User.generate_hash(password))

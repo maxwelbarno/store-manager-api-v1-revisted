@@ -3,38 +3,35 @@ from .models import *
 import re
 
 
-# class ValidateRegistration:
-#     """ User registration details validations """
+class ValidateRegistration:
+    """ User registration details validations """
 
-#     def __init__(self, email, is_admin, password):
-#         self.email = email
-#         self.is_admin = is_admin
-#         self.password = password
+    def __init__(self, email, is_admin, password):
+        self.email = email
+        self.is_admin = is_admin
+        self.password = password
 
-def validate(email, is_admin, password):
-    email = email
-    is_admin = is_admin
-    password = password
-    if email == "" or is_admin == "" or password == "":
-        message = "Sorry, there's an empty user value, please check your input values"
-        abort(400, message)
-
-    for user in users:
-        if email == user['email']:
-            message = "That email is already registered, please login!"
+    def validate(self):
+        if self.email == "" or self.is_admin == "" or self.password == "":
+            message = "Sorry, there's an empty user value, please check your input values"
             abort(400, message)
 
-    if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
-        message = "Please use a valid email address"
-        abort(400, message)
+        for user in users:
+            if self.email == user['email']:
+                message = "That email is already registered, please login!"
+                abort(400, message)
 
-    if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email) and type(is_admin) != bool:
-        message = "is_admin value must be a boolean!"
-        abort(400, message)
+        if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email):
+            message = "Please use a valid email address"
+            abort(400, message)
 
-    if len(password) < 6:
-        message = "password is too short, it should be more than 6 characters!"
-        abort(400, message)
+        if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email) and type(self.is_admin) != bool:
+            message = "is_admin value must be a boolean!"
+            abort(400, message)
+
+        if len(self.password) < 6:
+            message = "password is too short, it should be more than 6 characters!"
+            abort(400, message)
 
 
 # class ValidateLogin:
