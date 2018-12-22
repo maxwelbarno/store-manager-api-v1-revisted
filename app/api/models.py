@@ -41,7 +41,7 @@ class User:
     def __init__(self):
         self.users = users
 
-    def create_user(email, is_admin, password):
+    def create_user(self, email, is_admin, password):
         """ create user method """
 
         user = {
@@ -51,7 +51,7 @@ class User:
             "password": password
         }
 
-        users.append(user)
+        self.users.append(user)
         return user
 
     # def get_all_users(self):
