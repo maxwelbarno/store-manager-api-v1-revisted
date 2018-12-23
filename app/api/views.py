@@ -11,12 +11,10 @@ def admin_required(fn):
     def wrapper(*args, **kwargs):
         verify_jwt_in_request()
         claims = get_jwt_claims()
-        # if get_jwt_identity() != True:
         if claims['is_admin'] != True:
             return make_response(jsonify({"message": "Admin rights required!"}), 201)
             pass
-        else:
-            return fn(*args, **kwargs)
+        return fn(*args, **kwargs)
     return wrapper
 
 def attendant_required(fn):
@@ -27,8 +25,7 @@ def attendant_required(fn):
         if claims['is_admin'] != False:
             return make_response(jsonify({"message": "Attendant rights required!"}), 201)
             pass
-        else:
-            return fn(*args, **kwargs)
+        return fn(*args, **kwargs)
     return wrapper
 
 def user(email, is_admin, password):
@@ -51,10 +48,9 @@ def product_create(product_name, category, quantity, price):
     product_validation(product_name, category, quantity, price)
     return Product.create_product(product_name, category, quantity, price)
 
-def product_update(product_name, category, quantity, price):
+def update(product_name, category, quantity, price):
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price)
-
 
 def error_handling(error):
     error = error
@@ -138,7 +134,8 @@ class UpdateProduct(Resource):
         Product.get_specific_product(product_id)
         data = request.get_json()
         try:
-            return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
+            product= update(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            return make_response(jsonify({'message': 'update successful!', 'product': product}), 201)
         except KeyError as error:
             return error_handling(error)
 
