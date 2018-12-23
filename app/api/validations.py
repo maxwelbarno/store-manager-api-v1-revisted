@@ -18,10 +18,12 @@ def user_exists(email):
         if email == user['email']:
             return email
 
-def is_email_valid(email):
+def valid_email(email):
     email = email
-    if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
+    if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
         return True
+
+
 
 class ValidateRegistration:
     """ User registration details validations """
@@ -38,12 +40,10 @@ class ValidateRegistration:
         if user_exists(self.email):
             error("That email is already registered, please login!")
 
-        # if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email):
-        #     error("Please use a valid email address")
-        if is_email_valid(self.email):
+        if not valid_email(self.email):
             error("Please use a valid email address")
 
-        if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email) and type(self.is_admin) != bool:
+        if valid_email(self.email) and type(self.is_admin) != bool:
             error("is_admin value must be a boolean!")
 
         if len(self.password) < 6:
