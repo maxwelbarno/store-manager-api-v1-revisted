@@ -11,11 +11,12 @@ def blanks(email, is_admin, password):
     password=password
     if email == "" or is_admin == "" or password == "":
         return True
-    # email=""
-    # is_admin=""
-    # password=""
 
-
+def user_exists(email):
+    email = email
+    for user in users:
+        if email == user['email']:
+            return email
 
 
 class ValidateRegistration:
@@ -31,9 +32,10 @@ class ValidateRegistration:
         # if self.email == "" or self.is_admin == "" or self.password == "":
             error("Sorry, there's an empty user value, please check your input values")
 
-        for user in users:
-            if self.email == user['email']:
-                error("That email is already registered, please login!")
+        # for user in users:
+        #     if self.email == user['email']:
+        if user_exists(self.email):
+            error("That email is already registered, please login!")
 
         if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email):
             error("Please use a valid email address")
