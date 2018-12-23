@@ -23,6 +23,11 @@ def valid_email(email):
     if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
         return True
 
+def password_length(password):
+    password=password
+    if len(password) < 6:
+        return True
+
 
 
 class ValidateRegistration:
@@ -46,7 +51,8 @@ class ValidateRegistration:
         if valid_email(self.email) and type(self.is_admin) != bool:
             error("is_admin value must be a boolean!")
 
-        if len(self.password) < 6:
+        # if len(self.password) < 6:
+        if password_length(self.password):
             error("password is too short, it should be more than 6 characters!")
 
 
