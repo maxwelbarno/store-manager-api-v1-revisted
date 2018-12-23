@@ -18,6 +18,10 @@ def user_exists(email):
         if email == user['email']:
             return email
 
+def is_email_valid(email):
+    email = email
+    if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
+        return True
 
 class ValidateRegistration:
     """ User registration details validations """
@@ -29,15 +33,14 @@ class ValidateRegistration:
 
     def validate(self):
         if blanks(self.email, self.is_admin, self.password):
-        # if self.email == "" or self.is_admin == "" or self.password == "":
             error("Sorry, there's an empty user value, please check your input values")
 
-        # for user in users:
-        #     if self.email == user['email']:
         if user_exists(self.email):
             error("That email is already registered, please login!")
 
-        if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email):
+        # if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email):
+        #     error("Please use a valid email address")
+        if is_email_valid(self.email):
             error("Please use a valid email address")
 
         if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", self.email) and type(self.is_admin) != bool:
