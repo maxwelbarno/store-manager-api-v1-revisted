@@ -39,21 +39,21 @@ def user(email, is_admin, password):
     new = User.create_user(email, is_admin, User.generate_hash(password))
     return True
 
-def product(product_name, category, quantity, price):
+def product_validation(product_name, category, quantity, price):
     product_name = product_name
     category=category
     quantity=quantity
     price=price
-    ValidateProduct.validate(product_name, category, quantity, price)
+    validated_product=ValidateProduct.validate(product_name, category, quantity, price)
+    return validated_product
+
+def product_create(product_name, category, quantity, price):
+    product_validation(product_name, category, quantity, price)
     new_product = Product.create_product(product_name, category, quantity, price)
     return new_product
 
 def product_update(product_name, category, quantity, price):
-    product_name = product_name
-    category=category
-    quantity=quantity
-    price=price
-    ValidateProduct.validate(product_name, category, quantity, price)
+    product_validation(product_name, category, quantity, price)
     product = Product.update_product(product_name, category, quantity, price)
     return product
 
@@ -108,7 +108,7 @@ class Products(Resource):
         """ Only admin can add a product """
         try:
             data = request.get_json()
-            return make_response(jsonify(product(data['product_name'], data['category'], data['quantity'], data['unit_price'])), 201)
+            return make_response(jsonify(product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])), 201)
         except KeyError as error:
             return error_handling(error)
 
