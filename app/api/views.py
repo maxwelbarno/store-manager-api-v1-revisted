@@ -37,19 +37,23 @@ def user(email, is_admin, password):
     password=password
     ValidateRegistration.validate(email, is_admin, password)
     new = User.create_user(email, is_admin, User.generate_hash(password))
-    return new
+    return True
+
+def error_handling(error):
+    error = error
+    return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
 
 class Register(Resource):
     """ User registration """
 
     def post(self):
+        data = request.get_json()
         try:
-            data = request.get_json()
             if user(data['email'], data['is_admin'], data['password']):
                 return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
         except KeyError as error:
-            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
+            return error_handling(error)
 
 
 class Login(Resource):
@@ -102,7 +106,8 @@ class Products(Resource):
             new_product = self.products.create_product(product_name, category, quantity, unit_price)
             return make_response(jsonify(new_product), 201)
         except KeyError as error:
-            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
+            return error_handling(error)
+            # return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     @jwt_required
     def get(self):
@@ -148,7 +153,8 @@ class UpdateProduct(Resource):
             product_data = ValidateProduct.validate(product_name, category, quantity, unit_price)
             updated_product = self.products.update_product(product_name, category, quantity, unit_price)
         except KeyError as error:
-            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
+            # return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
+            return error_handling(error)
 
         return make_response(jsonify({'message': 'update successful!', 'product': updated_product}), 200)
 
@@ -195,7 +201,8 @@ class Sales(Resource):
             else:
                 return make_response(jsonify({'message': 'Warning! You are attempting to sale a non-existent product'}), 200)
         except KeyError as error:
-            return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
+            return error_handling(error)
+            # return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     @admin_required
     def get(self):
