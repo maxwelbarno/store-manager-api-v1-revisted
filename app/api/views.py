@@ -55,6 +55,7 @@ def product_update(product_name, category, quantity, price):
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price)
 
+
 def error_handling(error):
     error = error
     return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
@@ -107,8 +108,6 @@ class Products(Resource):
         try:
             data = request.get_json()
             product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            # product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            # Product.create_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
             return make_response(jsonify(), 201)
         except KeyError as error:
             return error_handling(error)
@@ -137,9 +136,9 @@ class UpdateProduct(Resource):
     @jwt_required
     def put(self, product_id):
         Product.get_specific_product(product_id)
-        d = request.get_json()
+        data = request.get_json()
         try:
-            return make_response(jsonify({'message': 'update successful!', 'product': product_update(d['product_name'], d['category'], d['quantity'], d['unit_price'])}), 201)
+            return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
         except KeyError as error:
             return error_handling(error)
 
