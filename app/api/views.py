@@ -137,9 +137,9 @@ class UpdateProduct(Resource):
     @jwt_required
     def put(self, product_id):
         Product.get_specific_product(product_id)
-        data = request.get_json()
+        d = request.get_json()
         try:
-            return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
+            return make_response(jsonify({'message': 'update successful!', 'product': product_update(d['product_name'], d['category'], d['quantity'], d['unit_price'])}), 201)
         except KeyError as error:
             return error_handling(error)
 
