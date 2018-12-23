@@ -39,13 +39,24 @@ def user(email, is_admin, password):
     new = User.create_user(email, is_admin, User.generate_hash(password))
     return True
 
-def product(product_name, category, quantity, price):
+def product_validation(product_name, category, quantity, price):
     product_name = product_name
     category=category
     quantity=quantity
     price=price
     validated_product=ValidateProduct.validate(product_name, category, quantity, price)
     return validated_product
+
+def product_create(product_name, category, quantity, price):
+    product_validation(product_name, category, quantity, price)
+    product = Product.create_product(product_name, category, quantity, price)
+    return product
+
+def product_update(product_name, category, quantity, price):
+    product_validation(product_name, category, quantity, price)
+    product = Product.update_product(product_name, category, quantity, price)
+    return product
+
 
 def error_handling(error):
     error = error
@@ -98,8 +109,9 @@ class Products(Resource):
         """ Only admin can add a product """
         try:
             data = request.get_json()
-            product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            Product.create_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            # product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            # Product.create_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
             return make_response(jsonify(), 201)
         except KeyError as error:
             return error_handling(error)
@@ -130,8 +142,7 @@ class UpdateProduct(Resource):
         Product.get_specific_product(product_id)
         data = request.get_json()
         try:
-            product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            return make_response(jsonify({'message': 'update successful!', 'product': Product.update_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
+            return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
         except KeyError as error:
             return error_handling(error)
 
