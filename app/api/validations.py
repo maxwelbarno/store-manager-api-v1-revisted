@@ -84,60 +84,58 @@ def sub_zero_price(price):
 class ValidateRegistration:
     """ User registration details validations """
 
-    def __init__(self, email, is_admin, password):
-        self.email = email
-        self.is_admin = is_admin
-        self.password = password
+    def validate(email, is_admin, password):
+        email=email
+        is_admin=is_admin
+        password=password
 
-    def validate(self):
-        if user_values_contain_blanks(self.email, self.is_admin, self.password):
+        if user_values_contain_blanks(email, is_admin, password):
             error("Sorry, there's an empty user value, please check your input values")
 
-        if user_exists(self.email):
+        if user_exists(email):
             error("That email is already registered, please login!")
 
-        if invalid_email(self.email):
+        if invalid_email(email):
             error("Please use a valid email address")
 
-        if is_admin_value_not_boolean(self.email, self.is_admin):
+        if is_admin_value_not_boolean(email, is_admin):
             error("is_admin value must be a boolean!")
 
-        if pasword_is_short(self.password):
+        if pasword_is_short(password):
             error("password is too short, it should be more than 6 characters!")
 
 
 class ValidateProduct:
     """ Product details validations """
 
-    def __init__(self, product_name, category, quantity, unit_price):
-        self.product_name = product_name
-        self.category = category
-        self.quantity = quantity
-        self.unit_price = unit_price
+    def validate(product_name, category, quantity, unit_price):
+        product_name=product_name
+        category=category
+        quantity=quantity
+        unit_price=unit_price
 
-    def validate(self):
-        if product_exists(self.product_name, self.category, self.quantity, self.unit_price):
+        if product_exists(product_name, category, quantity, unit_price):
             error("Sorry, such a product already exists, please confirm its category")
 
-        if product_values_contain_blanks(self.product_name, self.category, self.quantity, self.unit_price):
+        if product_values_contain_blanks(product_name, category, quantity, unit_price):
             error("Sorry, there's an empty value, please check your input values")
 
-        if non_string_product_name(self.product_name):
+        if non_string_product_name(product_name):
             error("A product name's value must be a string")
 
-        if non_string_category(self.category):
+        if non_string_category(category):
             error("A category's value must be a string")
 
-        if non_int_quantity(self.quantity):
+        if non_int_quantity(quantity):
             error("A quantity's value must be an integer")
         
-        if sub_zero_quantity(self.quantity):
+        if sub_zero_quantity(quantity):
             error("A quantity's value must be a positive integer")
 
-        if non_float_price(self.unit_price):
+        if non_float_price(unit_price):
             error("A price's value must be of float data type")
 
-        if sub_zero_price(self.unit_price):
+        if sub_zero_price(unit_price):
             error("A price's value must be a positive float")
 
 

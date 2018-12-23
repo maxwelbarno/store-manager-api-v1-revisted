@@ -7,7 +7,6 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 
 
 def admin_required(fn):
-
     @wraps(fn)
     def wrapper(*args, **kwargs):
         verify_jwt_in_request()
@@ -21,7 +20,6 @@ def admin_required(fn):
     return wrapper
 
 def attendant_required(fn):
-
     @wraps(fn)
     def wrapper(*args, **kwargs):
         verify_jwt_in_request()
@@ -33,27 +31,23 @@ def attendant_required(fn):
             return fn(*args, **kwargs)
     return wrapper
 
+def user(email, is_admin, password):
+    email=email
+    is_admin=is_admin
+    password=password
+    ValidateRegistration.validate(email, is_admin, password)
+    new = User.create_user(email, is_admin, User.generate_hash(password))
+    return new
+
 
 class Register(Resource):
     """ User registration """
 
-    def __init__(self):
-        self.user = User()
-
     def post(self):
         try:
             data = request.get_json()
-            email = data['email']
-            is_admin = data['is_admin']
-            password = data['password']
-
-            user_data = ValidateRegistration(
-                email, is_admin, password)
-            user_data.validate()
-
-            new_user = self.user.create_user(
-                email, is_admin, User.generate_hash(password))
-            return make_response(jsonify({"message": "User {} was created".format(email), }), 201)
+            if user(data['email'], data['is_admin'], data['password']):
+                return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
@@ -102,8 +96,8 @@ class Products(Resource):
             unit_price = data['unit_price']
             category = data['category']
 
-            product_data = ValidateProduct(product_name, category, quantity, unit_price)
-            product_data.validate()
+            product_data = ValidateProduct.validate(product_name, category, quantity, unit_price)
+            # product_data.validate()
 
             new_product = self.products.create_product(product_name, category, quantity, unit_price)
             return make_response(jsonify(new_product), 201)
@@ -151,10 +145,7 @@ class UpdateProduct(Resource):
             category = data['category']
             quantity = data['quantity']
             unit_price = data['unit_price']
-
-            product_data = ValidateProduct(product_name, category, quantity, unit_price)
-            product_data.validate()
-
+            product_data = ValidateProduct.validate(product_name, category, quantity, unit_price)
             updated_product = self.products.update_product(product_name, category, quantity, unit_price)
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)

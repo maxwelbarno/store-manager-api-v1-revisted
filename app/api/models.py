@@ -38,10 +38,10 @@ revoked_tokens = []
 class User:
     """ User model """
 
-    def __init__(self):
-        self.users = users
+    # def __init__(self):
+    #     self.users = users
 
-    def create_user(self, email, is_admin, password):
+    def create_user(email, is_admin, password):
         """ create user method """
 
         user = {
@@ -51,7 +51,7 @@ class User:
             "password": password
         }
 
-        self.users.append(user)
+        users.append(user)
         return user
 
     # def get_all_users(self):
