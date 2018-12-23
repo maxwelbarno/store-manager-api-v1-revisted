@@ -165,28 +165,3 @@ class Sale:
         for sale in self.sales:
             if sale['sale_id'] == sale_id:
                 return sale
-
-
-# class RevokedToken:
-#     """ Revoked tokens model """
-
-#     def __init__(self):
-#         self.revoked_tokens = revoked_tokens
-#         # self.revoked_on = datetime.datetime.now()
-
-#     def add_revoked_token(self, jti):
-#         """ add revoked token """
-#         revoked_token = {
-#             # "id": len(self.revoked_tokens)+1,
-#             "jti": jti
-#         }
-#         self.revoked_tokens.append(revoked_token)
-#         return revoked_token
-
-#     def is_jti_blacklisted(jti):
-#         """Check if token is blacklisted"""
-#         for token in revoked_tokens:
-#             if token[2] == jti:
-#                 return True
-#             else:
-#                 return False

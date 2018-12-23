@@ -13,8 +13,7 @@ def user_registration(self, data):
         return self.client.post(
             'api/v1/register',
             data=data,
-            content_type='application/json',
-        )
+            content_type='application/json')
 
 def user_login(self, data):
     return self.client.post(
@@ -30,6 +29,7 @@ def user_logout(self, token):
 
 def create_product(self, data, token):
     return self.client.post(
+        
         '/api/v1/products',
         data=data,
         content_type='application/json', 
@@ -93,3 +93,5 @@ class BaseTestCase(TestCase):
     
     def teardown(self):
         self.app_context.pop()
+
+        

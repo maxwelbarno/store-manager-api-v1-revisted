@@ -14,7 +14,7 @@ test_attendant_user = json.dumps(dict(
     password="test123"
 ))
 
-test_blank_value_user = json.dumps(dict(
+test_blank_email_value_user = json.dumps(dict(
     email='',
     is_admin=True,
     password="test123"

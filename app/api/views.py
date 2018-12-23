@@ -3,16 +3,7 @@ from flask_restful import Resource
 from .models import *
 from .validations import *
 from functools import wraps
-from flask_jwt_extended import (
-    create_access_token,
-    create_refresh_token,
-    jwt_required,
-    jwt_refresh_token_required,
-    get_jwt_identity,
-    verify_jwt_in_request,
-    get_jwt_claims,
-    get_raw_jwt
-)
+from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, verify_jwt_in_request, get_jwt_claims, get_raw_jwt)
 
 
 def admin_required(fn):
@@ -28,7 +19,6 @@ def admin_required(fn):
         else:
             return fn(*args, **kwargs)
     return wrapper
-
 
 def attendant_required(fn):
 
@@ -67,12 +57,6 @@ class Register(Resource):
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
-    # def get(self):
-    #     if len(users) > 0:
-    #         return make_response(jsonify(self.user.get_all_users()), 200)
-    #     else:
-    #         return make_response(jsonify({'message': 'No user record(s) available'}), 200)
-
 
 class Login(Resource):
     """ User login """
@@ -99,11 +83,7 @@ class Logout(Resource):
     @jwt_required
     def post(self):
         revoked_tokens.append(get_raw_jwt()["jti"])
-        return {"message": "Successfully logged out"}, 200
-        # try:
-            
-        # except:
-        #     return {"message": "Something went wrong"}, 500
+        return make_response(jsonify({'message': 'Successfully logged out'}), 200)
 
 
 class Products(Resource):
@@ -213,7 +193,6 @@ class Sales(Resource):
             sale_data.validate()
 
             if Sale.get_unit_price(product_id):
-        # self.assertEqual(resp.status_code, 400)
 
                 new_sale = self.sale.make_sale(product_id, quantity)
 
