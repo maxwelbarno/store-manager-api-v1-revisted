@@ -28,6 +28,11 @@ def password_length(password):
     if len(password) < 6:
         return True
 
+def is_admin_value_boolean(email, is_admin):
+    email=email
+    is_admin=is_admin
+    if valid_email(email) and type(is_admin) != bool:
+        return True
 
 
 class ValidateRegistration:
@@ -51,7 +56,6 @@ class ValidateRegistration:
         if valid_email(self.email) and type(self.is_admin) != bool:
             error("is_admin value must be a boolean!")
 
-        # if len(self.password) < 6:
         if password_length(self.password):
             error("password is too short, it should be more than 6 characters!")
 
