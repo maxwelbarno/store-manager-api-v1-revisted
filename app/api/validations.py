@@ -5,7 +5,7 @@ import re
 def error(message):
     return abort(400, message)
 
-def blanks(email, is_admin, password):
+def user_values_contain_blanks(email, is_admin, password):
     email=email
     is_admin=is_admin
     password=password
@@ -16,22 +16,69 @@ def user_exists(email):
     email = email
     for user in users:
         if email == user['email']:
-            return email
+            return True
 
-def valid_email(email):
+def invalid_email(email):
     email = email
-    if re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
+    if not re.match("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", email):
         return True
 
-def password_length(password):
+def pasword_is_short(password):
     password=password
     if len(password) < 6:
         return True
 
-def is_admin_value_boolean(email, is_admin):
+def is_admin_value_not_boolean(email, is_admin):
     email=email
     is_admin=is_admin
-    if valid_email(email) and type(is_admin) != bool:
+    if not invalid_email(email) and type(is_admin) != bool:
+        return True
+
+def product_exists(product_name, category, quantity, price):
+    product_name = product_name
+    category = category
+    quantity = quantity
+    price = price
+    for product in products:
+        if product_name == product['product_name'] and category == product['category'] and type(quantity) == int and type(price) == float and quantity >= 0 and price >= 0:
+            return True
+
+def product_values_contain_blanks(product_name, category, quantity, price):
+    product_name = product_name
+    category = category
+    quantity = quantity
+    price = price
+    if product_name == "" or quantity == "" or price == "" or category == "":
+        return True
+
+def non_string_product_name(product_name):
+    product=product_name
+    if type(product_name) != str:
+        return True
+
+def non_string_category(category):
+    category=category
+    if type(category) != str:
+        return True
+
+def non_int_quantity(quantity):
+    quantity=quantity
+    if type(quantity) != int:
+        return True
+
+def sub_zero_quantity(quantity):
+    quantity=quantity
+    if quantity <= 0:
+        return True
+
+def non_float_price(price):
+    price=price
+    if type(price) != float:
+        return True
+
+def sub_zero_price(price):
+    price=price
+    if price < 0 :
         return True
 
 
@@ -44,19 +91,19 @@ class ValidateRegistration:
         self.password = password
 
     def validate(self):
-        if blanks(self.email, self.is_admin, self.password):
+        if user_values_contain_blanks(self.email, self.is_admin, self.password):
             error("Sorry, there's an empty user value, please check your input values")
 
         if user_exists(self.email):
             error("That email is already registered, please login!")
 
-        if not valid_email(self.email):
+        if invalid_email(self.email):
             error("Please use a valid email address")
 
-        if valid_email(self.email) and type(self.is_admin) != bool:
+        if is_admin_value_not_boolean(self.email, self.is_admin):
             error("is_admin value must be a boolean!")
 
-        if password_length(self.password):
+        if pasword_is_short(self.password):
             error("password is too short, it should be more than 6 characters!")
 
 
@@ -70,29 +117,28 @@ class ValidateProduct:
         self.category = category
 
     def validate(self):
-        for product in products:
-            if self.product_name == product['product_name'] and self.category == product['category'] and type(self.quantity) == int and type(self.unit_price) == float and self.quantity >= 0 and self.unit_price >= 0:
-                error("Sorry, such a product already exists, please confirm its category")
+        if product_exists(self.product_name, self.category, self.quantity, self.unit_price):
+            error("Sorry, such a product already exists, please confirm its category")
 
-        if self.product_name == "" or self.quantity == "" or self.unit_price == "" or self.category == "":
+        if product_values_contain_blanks(self.product_name, self.category, self.quantity, self.unit_price):
             error("Sorry, there's an empty value, please check your input values")
 
-        if type(self.product_name) != str:
+        if non_string_product_name(self.product_name):
             error("A product name's value must be a string")
 
-        if type(self.category) != str:
+        if non_string_category(self.category):
             error("A category's value must be a string")
 
-        if type(self.quantity) != int:
+        if non_int_quantity(self.quantity):
             error("A quantity's value must be an integer")
-
-        if self.quantity <= 0:
+        
+        if sub_zero_quantity(self.quantity):
             error("A quantity's value must be a positive integer")
 
-        if type(self.unit_price) != float:
+        if non_float_price(self.unit_price):
             error("A price's value must be of float data type")
 
-        if self.unit_price <= 0:
+        if sub_zero_price(self.unit_price):
             error("A price's value must be a positive float")
 
 
