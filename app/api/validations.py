@@ -5,6 +5,19 @@ import re
 def error(message):
     return abort(400, message)
 
+def blanks(email, is_admin, password):
+    email=email
+    is_admin=is_admin
+    password=password
+    if email == "" or is_admin == "" or password == "":
+        return True
+    # email=""
+    # is_admin=""
+    # password=""
+
+
+
+
 class ValidateRegistration:
     """ User registration details validations """
 
@@ -14,7 +27,8 @@ class ValidateRegistration:
         self.password = password
 
     def validate(self):
-        if self.email == "" or self.is_admin == "" or self.password == "":
+        if blanks(self.email, self.is_admin, self.password):
+        # if self.email == "" or self.is_admin == "" or self.password == "":
             error("Sorry, there's an empty user value, please check your input values")
 
         for user in users:
