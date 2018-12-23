@@ -40,8 +40,7 @@ def product_exists(product_name, category, quantity, price):
     quantity = quantity
     price = price
     for product in products:
-        if product_name == product['product_name'] and category == product['category'] and type(quantity) == int and type(price) == float and quantity >= 0 and price >= 0:
-            return True
+        return True
 
 def product_values_contain_blanks(product_name, category, quantity, price):
     product_name = product_name
