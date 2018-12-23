@@ -49,14 +49,11 @@ def product_validation(product_name, category, quantity, price):
 
 def product_create(product_name, category, quantity, price):
     product_validation(product_name, category, quantity, price)
-    product = Product.create_product(product_name, category, quantity, price)
-    return product
+    return Product.create_product(product_name, category, quantity, price)
 
 def product_update(product_name, category, quantity, price):
     product_validation(product_name, category, quantity, price)
-    product = Product.update_product(product_name, category, quantity, price)
-    return product
-
+    return Product.update_product(product_name, category, quantity, price)
 
 def error_handling(error):
     error = error
