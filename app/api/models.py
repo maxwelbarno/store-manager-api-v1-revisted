@@ -78,14 +78,14 @@ class Product:
     def __init__(self):
         self.products = products
 
-    def create_product(self, product_name, quantity, unit_price, category):
+    def create_product(self, product_name, category, quantity, unit_price):
         """ create product method """
         product = {
             "product_id": len(self.products)+1,
             "product_name": product_name,
+            "category": category,
             "quantity": quantity,
             "unit_price": unit_price,
-            "category": category
         }
         self.products.append(product)
         return product
@@ -100,13 +100,13 @@ class Product:
             if product['product_id'] == product_id:
                 return product
 
-    def update_product(self, product_name, quantity, unit_price, category):
+    def update_product(self, product_name, category, quantity, unit_price):
         """ update a product method """
         product = {
             "product_name": product_name,
+            "category": category,
             "quantity": quantity,
             "unit_price": unit_price,
-            "category": category
         }
         return product
 
@@ -119,7 +119,6 @@ class Product:
 
 class Sale:
     """ Sale model """
-
     def __init__(self):
         self.sales = sales
 

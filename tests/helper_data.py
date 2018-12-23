@@ -118,8 +118,8 @@ product_with_non_positive_float_price = json.dumps(dict(
 ))
 
 update_product = json.dumps(dict(
-    category='beverages',
     product_name='tea',
+    category='beverages',
     quantity=100,
     unit_price=50.00
 ))

@@ -40,7 +40,8 @@ def product_exists(product_name, category, quantity, price):
     quantity = quantity
     price = price
     for product in products:
-        return True
+        if product_name == product['product_name'] and category == product['category'] and type(quantity) == int and type(price) == float and quantity >= 0 and price >= 0:
+            return True
 
 def product_values_contain_blanks(product_name, category, quantity, price):
     product_name = product_name
@@ -80,7 +81,6 @@ def sub_zero_price(price):
     if price < 0 :
         return True
 
-
 class ValidateRegistration:
     """ User registration details validations """
 
@@ -109,11 +109,11 @@ class ValidateRegistration:
 class ValidateProduct:
     """ Product details validations """
 
-    def __init__(self, product_name, quantity, unit_price, category):
+    def __init__(self, product_name, category, quantity, unit_price):
         self.product_name = product_name
+        self.category = category
         self.quantity = quantity
         self.unit_price = unit_price
-        self.category = category
 
     def validate(self):
         if product_exists(self.product_name, self.category, self.quantity, self.unit_price):

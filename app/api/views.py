@@ -122,12 +122,10 @@ class Products(Resource):
             unit_price = data['unit_price']
             category = data['category']
 
-            product_data = ValidateProduct(
-                product_name, quantity, unit_price, category)
+            product_data = ValidateProduct(product_name, category, quantity, unit_price)
             product_data.validate()
 
-            new_product = self.products.create_product(
-                product_name, quantity, unit_price, category)
+            new_product = self.products.create_product(product_name, category, quantity, unit_price)
             return make_response(jsonify(new_product), 201)
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
@@ -174,12 +172,10 @@ class UpdateProduct(Resource):
             quantity = data['quantity']
             unit_price = data['unit_price']
 
-            product_data = ValidateProduct(
-                product_name, quantity, unit_price, category)
+            product_data = ValidateProduct(product_name, category, quantity, unit_price)
             product_data.validate()
 
-            updated_product = self.products.update_product(
-                product_name, quantity, unit_price, category)
+            updated_product = self.products.update_product(product_name, category, quantity, unit_price)
         except KeyError as error:
             return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
