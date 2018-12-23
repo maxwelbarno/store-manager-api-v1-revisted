@@ -39,6 +39,24 @@ def user(email, is_admin, password):
     new = User.create_user(email, is_admin, User.generate_hash(password))
     return True
 
+def product(product_name, category, quantity, price):
+    product_name = product_name
+    category=category
+    quantity=quantity
+    price=price
+    ValidateProduct.validate(product_name, category, quantity, price)
+    new_product = Product.create_product(product_name, category, quantity, price)
+    return new_product
+
+def product_update(product_name, category, quantity, price):
+    product_name = product_name
+    category=category
+    quantity=quantity
+    price=price
+    ValidateProduct.validate(product_name, category, quantity, price)
+    product = Product.update_product(product_name, category, quantity, price)
+    return product
+
 def error_handling(error):
     error = error
     return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
@@ -50,8 +68,8 @@ class Register(Resource):
     def post(self):
         data = request.get_json()
         try:
-            if user(data['email'], data['is_admin'], data['password']):
-                return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
+            user(data['email'], data['is_admin'], data['password'])
+            return make_response(jsonify({"message": "User {} was created".format(data['email']), }), 201)
         except KeyError as error:
             return error_handling(error)
 
@@ -62,13 +80,11 @@ class Login(Resource):
     def post(self):
         try:
             data = request.get_json()
-            email = data['email']
-            password = data['password']
-            user = User.search(email, password)
+            user = User.search(data['email'], data['password'])
             if user:
                 access_token = create_access_token(identity=user['is_admin'])
                 return make_response(jsonify({
-                    'message': 'Welcome {}'.format(email),
+                    'message': 'Welcome {}'.format(data['email']),
                     "access_token": access_token
                 }))
             return make_response(jsonify({'message': 'wrong credentials'}), 200)
@@ -86,91 +102,55 @@ class Logout(Resource):
 
 class Products(Resource):
     """ admin and an attendant should be able to retrieve all products """
-
-    def __init__(self):
-        self.products = Product()
-
+    
     @admin_required
     def post(self):
         """ Only admin can add a product """
         try:
             data = request.get_json()
-            product_name = data['product_name']
-            quantity = data['quantity']
-            unit_price = data['unit_price']
-            category = data['category']
-
-            product_data = ValidateProduct.validate(product_name, category, quantity, unit_price)
-            # product_data.validate()
-
-            new_product = self.products.create_product(product_name, category, quantity, unit_price)
-            return make_response(jsonify(new_product), 201)
+            return make_response(jsonify(product(data['product_name'], data['category'], data['quantity'], data['unit_price'])), 201)
         except KeyError as error:
             return error_handling(error)
-            # return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     @jwt_required
     def get(self):
         """ Admin/store attendant can get all products """
         if len(products) > 0:
-            return make_response(jsonify({'message': 'Success','products': self.products.get_all_products()}), 200)
-        else:
-            return make_response(jsonify({'message': 'No product record(s) available'}), 200)
+            return make_response(jsonify({'message': 'Success','products': Product.get_all_products()}), 200)
+        return make_response(jsonify({'message': 'No product record(s) available'}), 200)
 
 
 class GetSpecificProduct(Resource):
-    """ Admin/store attendant can get a specific product """
-
-    def __init__(self):
-        self.products = Product()
 
     @jwt_required
     def get(self, product_id):
-        product = self.products.get_specific_product(product_id)
+        product = Product.get_specific_product(product_id)
         if product:
             return make_response(jsonify(product), 200)
-        else:
-            return make_response(jsonify({'message': 'Sorry, the product does not exist!'}), 404)
+        return make_response(jsonify({'message': 'Sorry, the product does not exist!'}), 404)
 
 
 class UpdateProduct(Resource):
     """ Update a specific product """
 
-    def __init__(self):
-        self.products = Product()
-
     @jwt_required
     def put(self, product_id):
-        product = self.products.get_specific_product(product_id)
-
+        product = Product.get_specific_product(product_id)
         data = request.get_json()
-
         try:
-            product_name = data['product_name']
-            category = data['category']
-            quantity = data['quantity']
-            unit_price = data['unit_price']
-            product_data = ValidateProduct.validate(product_name, category, quantity, unit_price)
-            updated_product = self.products.update_product(product_name, category, quantity, unit_price)
+            return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
         except KeyError as error:
-            # return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
             return error_handling(error)
-
-        return make_response(jsonify({'message': 'update successful!', 'product': updated_product}), 200)
 
 
 class DeleteProduct(Resource):
     """ Delete a specific product """
 
-    def __init__(self):
-        self.product = Product()
-
     @admin_required
     def delete(self, product_id):
-        if self.product.delete_product(product_id):
+        if Product.delete_product(product_id):
             return make_response(jsonify({'message': 'delete operation successful!'}), 200)
-        else:
-            return make_response(jsonify({'message': 'Sorry, the product does not exist!'}), 404)
+        return make_response(jsonify({'message': 'Sorry, the product does not exist!'}), 404)
 
 
 class Sales(Resource):
@@ -186,30 +166,22 @@ class Sales(Resource):
             product_id = data['product_id']
             quantity = data['quantity']
 
-            sale_data = ValidateSale(product_id, quantity)
-            sale_data.validate()
+            sale_data = ValidateSale.validate(product_id, quantity)
 
             if Sale.get_unit_price(product_id):
-
                 new_sale = self.sale.make_sale(product_id, quantity)
-
                 if new_sale:
                     return make_response(jsonify(new_sale), 201)
-
-                else:
-                    return make_response(jsonify({'message': 'Insufficient stock'}), 200)
-            else:
-                return make_response(jsonify({'message': 'Warning! You are attempting to sale a non-existent product'}), 200)
+                return make_response(jsonify({'message': 'Insufficient stock'}), 200)
+            return make_response(jsonify({'message': 'Warning! You are attempting to sale a non-existent product'}), 200)
         except KeyError as error:
             return error_handling(error)
-            # return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
     @admin_required
     def get(self):
         if len(sales) > 0:
             return make_response(jsonify(self.sale.get_all_sales()), 200)
-        else:
-            return make_response(jsonify({'message': 'No sale record(s) available'}), 200)
+        return make_response(jsonify({'message': 'No sale record(s) available'}), 200)
 
 
 class GetSpecificSale(Resource):
@@ -223,5 +195,4 @@ class GetSpecificSale(Resource):
         sale = self.sale.get_specific_sale(sale_id)
         if sale:
             return make_response(jsonify({'message': 'Success','sale': sale}), 200)
-        else:
-            return make_response(jsonify({'message': 'Sorry, sale record does not exist'}), 400)
+        return make_response(jsonify({'message': 'Sorry, sale record does not exist'}), 400)

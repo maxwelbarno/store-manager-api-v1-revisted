@@ -161,7 +161,7 @@ class SaleTestCase(BaseTestCase):
         resp = make_sale(self, sale_with_non_positive_quantity_value, token) 
         self.assertEqual(resp.status_code, 400)
         response_data = json.loads(resp.data.decode())
-        self.assertEqual(response_data['message'], "quantity cannot be less than one")
+        self.assertEqual(response_data['message'], "A quantity's value must be a positive integer")
 
     def test_sale_product_without_quantity_key(self):
         users.clear()

@@ -75,32 +75,32 @@ class User:
 class Product:
     """ Product model """
 
-    def __init__(self):
-        self.products = products
+    # def __init__(self):
+    #     self.products = products
 
-    def create_product(self, product_name, category, quantity, unit_price):
+    def create_product(product_name, category, quantity, unit_price):
         """ create product method """
         product = {
-            "product_id": len(self.products)+1,
+            "product_id": len(products)+1,
             "product_name": product_name,
             "category": category,
             "quantity": quantity,
             "unit_price": unit_price,
         }
-        self.products.append(product)
+        products.append(product)
         return product
 
-    def get_all_products(self):
+    def get_all_products():
         """ get all products method """
-        return self.products
+        return products
 
-    def get_specific_product(self, product_id):
+    def get_specific_product(product_id):
         """ get a specific product method """
-        for product in self.products:
+        for product in products:
             if product['product_id'] == product_id:
                 return product
 
-    def update_product(self, product_name, category, quantity, unit_price):
+    def update_product(product_name, category, quantity, unit_price):
         """ update a product method """
         product = {
             "product_name": product_name,
@@ -110,10 +110,10 @@ class Product:
         }
         return product
 
-    def delete_product(self, product_id):
-        for product in self.products:
+    def delete_product(product_id):
+        for product in products:
             if product['product_id'] == product_id:
-                self.products.remove(product)
+                products.remove(product)
                 return product
 
 

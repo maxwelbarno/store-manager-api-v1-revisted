@@ -81,6 +81,17 @@ def sub_zero_price(price):
     if price < 0 :
         return True
 
+def non_int_product_id(product_id):
+    product_id=product_id
+    if type(product_id) != int:
+        return True
+
+def sale_values_contain_blanks(product_id, quantity):
+    product_id = product_id
+    quantity = quantity
+    if product_id == "" or quantity == "":
+        return True
+
 class ValidateRegistration:
     """ User registration details validations """
 
@@ -142,19 +153,18 @@ class ValidateProduct:
 class ValidateSale:
     """ Sale validation """
 
-    def __init__(self, product_id, quantity):
-        self.product_id = product_id
-        self.quantity = quantity
+    def validate(product_id, quantity):
+        product_id = product_id
+        quantity = quantity
 
-    def validate(self):
-        if self.product_id == "" or self.quantity == "":
+        if sale_values_contain_blanks(product_id, quantity):
             error("Sorry, there's an empty value, please check your input values")
-            
-        if type(self.product_id) != int:
+
+        if non_int_product_id(product_id):
             error("A sale id's value must be an int")
 
-        if type(self.quantity) != int:
+        if non_int_quantity(quantity):
             error("A quantity's value must be an integer")
 
-        if self.quantity <= 0:
-            error("quantity cannot be less than one")
+        if sub_zero_quantity(quantity):
+            error("A quantity's value must be a positive integer")
