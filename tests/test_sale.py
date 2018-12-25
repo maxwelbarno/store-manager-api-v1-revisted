@@ -9,6 +9,7 @@ class SaleTestCase(BaseTestCase):
     def test_make_sale(self):
         # """ Test API cannot allow an admin user make a sale """
         users.clear()
+        sales.clear()
         user_registration(self, test_admin_user)
         test_admin_user_login = user_login(self, admin_user_login)
         response_content = json.loads(test_admin_user_login.data.decode('utf-8'))
@@ -56,10 +57,12 @@ class SaleTestCase(BaseTestCase):
     def test_attendant_get_specific_sale_item(self):
         # """ Test API cannot allow an admin get a specific sale """
         users.clear()
+        sales.clear()
         user_registration(self, test_attendant_user)
         test_attendant_user_login = user_login(self, attendant_user_login)
         response_content = json.loads(test_attendant_user_login.data.decode('utf-8'))
         token = response_content["access_token"]
+        make_sale(self, sale, token)
         resp = get_specific_sale(self, token)
         response_data = json.loads(resp.data.decode())
         self.assertEqual(response_data['message'], "Success")

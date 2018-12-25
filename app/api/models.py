@@ -58,9 +58,9 @@ class User:
     @staticmethod
     def verify_hash(password, hash):
         return sha256.verify(password, hash)
-
-    def search(email, password):
-        for user in users:
+    
+    def search(email, password): 
+        for user in users: 
             if user['email'] == email and User.verify_hash(password, user['password']):
                 return user
 
@@ -83,6 +83,7 @@ class Product:
     def get_all_products():
         """ get all products method """
         return products
+        
 
     def get_specific_product(product_id):
         """ get a specific product method """
@@ -109,26 +110,19 @@ class Product:
 
 class Sale:
     """ Sale model """
-
     def __init__(self):
         self.sales = sales
 
-    def get_unit_price(product_id):
-        for product in products:
-            if product['product_id'] == product_id:
-                unit_price = product['unit_price']
-                return unit_price
-
-    def get_available_products(product_id):
-        for product in products:
-            if product['product_id'] == product_id:
-                quantity = product['quantity']
-                return quantity
+    # def get_product(product_id):
+    #     for product in products:
+    #         if product['product_id'] == product_id:
+    #             return product
 
     def make_sale(self, product_id, quantity):
+        """ sale an item """
         self.quantity = int(quantity)
-        self.unit_price = Sale.get_unit_price(product_id)
-        self.available_stock = Sale.get_available_products(product_id)
+        self.price = Sale.get_price(product_id)
+        self.available_stock = Sale.get_quantity(product_id)
 
         remainder = self.available_stock-self.quantity
         for product in products:
@@ -142,17 +136,33 @@ class Sale:
                 "sale_id": len(self.sales)+1,
                 "product_id": product_id,
                 "quantity": self.quantity,
-                "unit_price": self.unit_price,
-                "cost": self.quantity * self.unit_price
+                "unit_price": self.price,
+                "cost": self.quantity * self.price
             }
             self.sales.append(sale)
 
             return sale
 
     def get_all_sales(self):
+        """ Get all sales """
         return self.sales
 
     def get_specific_sale(self, sale_id):
+        """ Get specific sale item """
         for sale in self.sales:
             if sale['sale_id'] == sale_id:
                 return sale
+
+    def get_price(product_id):
+        """ Get price of the item"""
+        for product in products:
+            if product['product_id'] == product_id:
+                unit_price = product['unit_price']
+                return unit_price
+
+    def get_quantity(product_id):
+        """ Get available quantity of the item"""
+        for product in products:
+            if product['product_id'] == product_id:
+                quantity = product['quantity']
+                return quantity

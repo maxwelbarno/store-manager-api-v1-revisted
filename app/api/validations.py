@@ -96,6 +96,7 @@ class ValidateRegistration:
     """ User registration details validations """
 
     def validate(email, is_admin, password):
+        """ validate user """
         email=email
         is_admin=is_admin
         password=password
@@ -120,6 +121,7 @@ class ValidateProduct:
     """ Product details validations """
 
     def validate(product_name, category, quantity, unit_price):
+        """ validate product """
         product_name=product_name
         category=category
         quantity=quantity
@@ -154,6 +156,7 @@ class ValidateSale:
     """ Sale validation """
 
     def validate(product_id, quantity):
+        """ validate sale """
         product_id = product_id
         quantity = quantity
 

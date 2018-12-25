@@ -29,6 +29,7 @@ def attendant_required(fn):
     return wrapper
 
 def user(email, is_admin, password):
+    """ custom create user function """
     email=email
     is_admin=is_admin
     password=password
@@ -37,6 +38,7 @@ def user(email, is_admin, password):
     return True
 
 def product_validation(product_name, category, quantity, price):
+    """ custom product validation """
     product_name = product_name
     category=category
     quantity=quantity
@@ -45,14 +47,20 @@ def product_validation(product_name, category, quantity, price):
     return validated_product
 
 def product_create(product_name, category, quantity, price):
+    """ custom create product function """
     product_validation(product_name, category, quantity, price)
     return Product.create_product(product_name, category, quantity, price)
 
 def product_update(product_name, category, quantity, price):
+    """ custom product update function """
     product_validation(product_name, category, quantity, price)
     return Product.update_product(product_name, category, quantity, price)
 
+def validate_sale(product_id, quantity):
+    return ValidateSale.validate(product_id, quantity)
+
 def error_handling(error):
+    """ key error handling """
     error = error
     return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
 
@@ -160,13 +168,10 @@ class Sales(Resource):
     def post(self):
         try:
             data = request.get_json()
-            product_id = data['product_id']
-            quantity = data['quantity']
+            validate_sale(data['product_id'], data['quantity'])
 
-            sale_data = ValidateSale.validate(product_id, quantity)
-
-            if Sale.get_unit_price(product_id):
-                new_sale = self.sale.make_sale(product_id, quantity)
+            if Product.get_specific_product(data['product_id']):
+                new_sale = self.sale.make_sale(data['product_id'], data['quantity'])
                 if new_sale:
                     return make_response(jsonify(new_sale), 201)
                 return make_response(jsonify({'message': 'Insufficient stock'}), 200)
