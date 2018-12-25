@@ -119,8 +119,7 @@ class Products(Resource):
         
         try:
             data = request.get_json()
-            product_create(*parameters)
-            
+            product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
             return make_response(jsonify(), 201)
         except KeyError as error:
             return error_handling(error)
