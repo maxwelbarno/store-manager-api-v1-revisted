@@ -38,9 +38,6 @@ revoked_tokens = []
 class User:
     """ User model """
 
-    # def __init__(self):
-    #     self.users = users
-
     def create_user(email, is_admin, password):
         """ create user method """
 
@@ -54,10 +51,6 @@ class User:
         users.append(user)
         return user
 
-    # def get_all_users(self):
-    #     """ get all users method """
-    #     return users
-
     @staticmethod
     def generate_hash(password):
         return sha256.hash(password)
@@ -65,18 +58,15 @@ class User:
     @staticmethod
     def verify_hash(password, hash):
         return sha256.verify(password, hash)
-    
-    def search(email, password): 
-        for user in users: 
+
+    def search(email, password):
+        for user in users:
             if user['email'] == email and User.verify_hash(password, user['password']):
                 return user
 
 
 class Product:
     """ Product model """
-
-    # def __init__(self):
-    #     self.products = products
 
     def create_product(product_name, category, quantity, unit_price):
         """ create product method """
@@ -119,6 +109,7 @@ class Product:
 
 class Sale:
     """ Sale model """
+
     def __init__(self):
         self.sales = sales
 
