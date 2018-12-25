@@ -39,21 +39,22 @@ def user(email, is_admin, password):
 
 def product_validation(product_name, category, quantity, price):
     """ custom product validation """
-    params=[product_name, category, quantity, price]
-    validated_product=ValidateProduct.validate(*params)
+    product_name = product_name
+    category=category
+    quantity=quantity
+    price=price
+    validated_product=ValidateProduct.validate(product_name, category, quantity, price)
     return validated_product
 
 def product_create(product_name, category, quantity, price):
     """ custom create product function """
-    params=[product_name, category, quantity, price]
-    product_validation(*params)
-    return Product.create_product(*params)
+    product_validation(product_name, category, quantity, price)
+    return Product.create_product(product_name, category, quantity, price)
 
 def product_update(product_name, category, quantity, price):
     """ custom product update function """
-    params=[product_name, category, quantity, price]
-    product_validation(*params)
-    return Product.update_product(*params)
+    product_validation(product_name, category, quantity, price)
+    return Product.update_product(product_name, category, quantity, price)
 
 def validate_sale(product_id, quantity):
     """ validate sale """
