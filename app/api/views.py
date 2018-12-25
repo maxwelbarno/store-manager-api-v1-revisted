@@ -46,15 +46,15 @@ def product_validation(product_name, category, quantity, price):
     validated_product=ValidateProduct.validate(product_name, category, quantity, price)
     return validated_product
 
-# def product_create(product_name, category, quantity, price):
-#     """ custom create product function """
-#     product_validation(product_name, category, quantity, price)
-#     return Product.create_product(product_name, category, quantity, price)
+def product_create(product_name, category, quantity, price):
+    """ custom create product function """
+    product_validation(product_name, category, quantity, price)
+    return Product.create_product(product_name, category, quantity, price)
 
-# def product_update(product_name, category, quantity, price):
-#     """ custom product update function """
-#     product_validation(product_name, category, quantity, price)
-#     return Product.update_product(product_name, category, quantity, price)
+def product_update(product_name, category, quantity, price):
+    """ custom product update function """
+    product_validation(product_name, category, quantity, price)
+    return Product.update_product(product_name, category, quantity, price)
 
 def validate_sale(product_id, quantity):
     """ validate sale """
@@ -64,6 +64,7 @@ def product_sale(product_id, quantity):
     """ custom product sale """
     validate_sale(product_id, quantity)
     return Sale.make_sale(product_id, quantity)
+
             
 def error_handling(error):
     """ key error handling """
@@ -115,10 +116,13 @@ class Products(Resource):
     @admin_required
     def post(self):
         """ Only admin can add a product """
+        
         try:
             data = request.get_json()
-            product_validation(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            Product.create_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            # product_validation(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            # Product.create_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            
             return make_response(jsonify(), 201)
         except KeyError as error:
             return error_handling(error)
@@ -149,9 +153,8 @@ class UpdateProduct(Resource):
         Product.get_specific_product(product_id)
         data = request.get_json()
         try:
-            product_validation(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            product=Product.update_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            return make_response(jsonify({'message': 'update successful!', 'product': product}), 201)
+            # product_validation(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
         except KeyError as error:
             return error_handling(error)
 

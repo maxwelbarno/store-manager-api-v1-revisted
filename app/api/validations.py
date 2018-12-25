@@ -96,7 +96,7 @@ class ValidateRegistration:
     """ User registration details validations """
 
     def validate(email, is_admin, password):
-        """ validate user """
+        """ validate sale """
         email=email
         is_admin=is_admin
         password=password
