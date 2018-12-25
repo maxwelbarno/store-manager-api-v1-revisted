@@ -119,9 +119,7 @@ class Products(Resource):
         
         try:
             data = request.get_json()
-            product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            # product_validation(data['product_name'], data['category'], data['quantity'], data['unit_price'])
-            # Product.create_product(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            product_create(*parameters)
             
             return make_response(jsonify(), 201)
         except KeyError as error:
@@ -153,7 +151,6 @@ class UpdateProduct(Resource):
         Product.get_specific_product(product_id)
         data = request.get_json()
         try:
-            # product_validation(data['product_name'], data['category'], data['quantity'], data['unit_price'])
             return make_response(jsonify({'message': 'update successful!', 'product': product_update(data['product_name'], data['category'], data['quantity'], data['unit_price'])}), 201)
         except KeyError as error:
             return error_handling(error)
