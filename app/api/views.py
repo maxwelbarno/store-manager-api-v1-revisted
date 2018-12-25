@@ -39,10 +39,6 @@ def user(email, is_admin, password):
 
 def product_validation(product_name, category, quantity, price):
     """ custom product validation """
-    # product_name = product_name
-    # category=category
-    # quantity=quantity
-    # price=price
     params=[product_name, category, quantity, price]
     validated_product=ValidateProduct.validate(*params)
     return validated_product
@@ -123,6 +119,7 @@ class Products(Resource):
         try:
             data = request.get_json()
             product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            
             return make_response(jsonify(), 201)
         except KeyError as error:
             return error_handling(error)
