@@ -118,34 +118,34 @@ class Sale:
     #         if product['product_id'] == product_id:
     #             return product
 
-    def make_sale(self, product_id, quantity):
+    def make_sale(product_id, quantity):
         """ sale an item """
-        self.quantity = int(quantity)
-        self.price = Sale.get_price(product_id)
-        self.available_stock = Sale.get_quantity(product_id)
+        quantity = int(quantity)
+        price = Sale.get_price(product_id)
+        available_stock = Sale.get_quantity(product_id)
 
-        remainder = self.available_stock-self.quantity
+        remainder = available_stock-quantity
         for product in products:
             if product['product_id'] == product_id:
                 if remainder >= 0:
                     product['quantity'] = remainder
 
-        if self.available_stock >= self.quantity:
+        if available_stock >= quantity:
 
             sale = {
-                "sale_id": len(self.sales)+1,
+                "sale_id": len(sales)+1,
                 "product_id": product_id,
-                "quantity": self.quantity,
-                "unit_price": self.price,
-                "cost": self.quantity * self.price
+                "quantity": quantity,
+                "unit_price": price,
+                "cost": quantity * price
             }
-            self.sales.append(sale)
+            sales.append(sale)
 
             return sale
 
-    def get_all_sales(self):
+    def get_all_sales():
         """ Get all sales """
-        return self.sales
+        return sales
 
     def get_specific_sale(self, sale_id):
         """ Get specific sale item """

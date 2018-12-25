@@ -57,8 +57,14 @@ def product_update(product_name, category, quantity, price):
     return Product.update_product(product_name, category, quantity, price)
 
 def validate_sale(product_id, quantity):
+    """ validate sale """
     return ValidateSale.validate(product_id, quantity)
 
+def product_sale(product_id, quantity):
+    """ custom product sale """
+    validate_sale(product_id, quantity)
+    return Sale.make_sale(product_id, quantity)
+            
 def error_handling(error):
     """ key error handling """
     error = error
@@ -161,19 +167,14 @@ class DeleteProduct(Resource):
 class Sales(Resource):
     """ Show all sales """
 
-    def __init__(self):
-        self.sale = Sale()
-
     @attendant_required
     def post(self):
         try:
             data = request.get_json()
             validate_sale(data['product_id'], data['quantity'])
-
             if Product.get_specific_product(data['product_id']):
-                new_sale = self.sale.make_sale(data['product_id'], data['quantity'])
-                if new_sale:
-                    return make_response(jsonify(new_sale), 201)
+                if product_sale(data['product_id'], data['quantity']):
+                    return make_response(jsonify(product_sale(data['product_id'], data['quantity'])), 201)
                 return make_response(jsonify({'message': 'Insufficient stock'}), 200)
             return make_response(jsonify({'message': 'Warning! You are attempting to sale a non-existent product'}), 200)
         except KeyError as error:
@@ -182,7 +183,7 @@ class Sales(Resource):
     @admin_required
     def get(self):
         if len(sales) > 0:
-            return make_response(jsonify(self.sale.get_all_sales()), 200)
+            return make_response(jsonify(Sale.get_all_sales()), 200)
         return make_response(jsonify({'message': 'No sale record(s) available'}), 200)
 
 
