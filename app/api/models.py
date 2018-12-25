@@ -113,11 +113,6 @@ class Sale:
     def __init__(self):
         self.sales = sales
 
-    # def get_product(product_id):
-    #     for product in products:
-    #         if product['product_id'] == product_id:
-    #             return product
-
     def make_sale(product_id, quantity):
         """ sale an item """
         quantity = int(quantity)
@@ -152,12 +147,6 @@ class Sale:
         for sale in self.sales:
             if sale['sale_id'] == sale_id:
                 return sale
-
-    # def get_item(product_id):
-    #     """get an item"""
-    #     for product in products:
-    #         if product['product_id'] == product_id:
-    #             return product
 
     def get_price(product_id):
         """ Get price of the item"""
