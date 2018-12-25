@@ -153,16 +153,16 @@ class Sale:
             if sale['sale_id'] == sale_id:
                 return sale
 
-    def get_price(product_id):
-        """ Get price of the item"""
+    def get_item(product_id):
+        """get an item"""
         for product in products:
             if product['product_id'] == product_id:
-                unit_price = product['unit_price']
-                return unit_price
+                return product
+
+    def get_price(product_id):
+        """ Get price of the item"""
+        return Sale.get_item(product_id)['unit_price']
 
     def get_quantity(product_id):
         """ Get available quantity of the item"""
-        for product in products:
-            if product['product_id'] == product_id:
-                quantity = product['quantity']
-                return quantity
+        return Sale.get_item(product_id)['quantity']
