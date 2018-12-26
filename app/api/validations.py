@@ -39,9 +39,8 @@ def product_exists(product_name, category, quantity, price):
     category = category
     quantity = quantity
     price = price
-    for product in products:
-        if product_name == product['product_name'] and category == product['category'] and type(quantity) == int and type(price) == float and quantity >= 0 and price >= 0:
-            return True
+    if check_product(product_name, category) and correct_types(quantity, price) and positive_values(quantity, price):
+        return True
 
 def product_values_contain_blanks(product_name, category, quantity, price):
     product_name = product_name
@@ -50,6 +49,27 @@ def product_values_contain_blanks(product_name, category, quantity, price):
     price = price
     if product_name == "" or quantity == "" or price == "" or category == "":
         return True
+
+def check_product(product_name, category):
+    category=category
+    product_name = product_name
+    for product in products:
+        if product_name == product['product_name'] and category == product['category']:
+            return True
+
+
+def correct_types(quantity, price):
+    quantity=quantity
+    price=price
+    if not non_int_quantity(quantity) and not non_float_price(price):
+        return True
+
+def positive_values(quantity, price):
+    quantity=quantity
+    price=price
+    if not sub_zero_price(price) and not sub_zero_quantity(quantity):
+        return True
+
 
 def non_string_product_name(product_name):
     product=product_name
