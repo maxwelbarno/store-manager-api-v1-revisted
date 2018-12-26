@@ -9,13 +9,15 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        claims = get_jwt_claims()
-        if claims['is_admin'] != True:
+        jwt_holder()
+        if get_jwt_claims()['is_admin'] != True:
             return make_response(jsonify({"message": "Admin rights required!"}), 201)
             pass
         return fn(*args, **kwargs)
     return wrapper
+
+def jwt_holder():
+    return verify_jwt_in_request()
 
 def attendant_required(fn):
     @wraps(fn)
