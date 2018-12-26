@@ -57,7 +57,6 @@ def check_product(product_name, category):
         if product_name == product['product_name'] and category == product['category']:
             return True
 
-
 def correct_types(quantity, price):
     quantity=quantity
     price=price
