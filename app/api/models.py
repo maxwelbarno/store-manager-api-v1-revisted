@@ -4,33 +4,33 @@ import datetime
 
 # lists
 products = [{
-    "product_id": 1,
-    "product_name": "mocha coffee",
-    "category": "beverages",
-    "quantity": 100,
-    "unit_price": 200.00
-},
+        "product_id": 1,
+        "product_name": "mocha coffee",
+        "category": "beverages",
+        "quantity": 100,
+        "unit_price": 200.00
+    },
     {
-    "product_id": 2,
-    "product_name": "capuccino coffee",
-    "category": "beverages",
-    "quantity": 200,
-    "unit_price": 250.00
-}]
+        "product_id": 2,
+        "product_name": "capuccino coffee",
+        "category": "beverages",
+        "quantity": 200,
+        "unit_price": 250.00
+    }]
 sales = [{
-    "cost": 1000,
-    "product_id": 1,
-    "quantity": 1,
-    "sale_id": 1,
-    "unit_price": 200
-},
+        "cost": 1000,
+        "product_id": 1,
+        "quantity": 1,
+        "sale_id": 1,
+        "unit_price": 200
+    },
     {
-    "cost": 800,
-    "product_id": 2,
-    "quantity": 5,
-    "sale_id": 2,
-    "unit_price": 140
-}]
+        "cost": 800,
+        "product_id": 2,
+        "quantity": 5,
+        "sale_id": 2,
+        "unit_price": 140
+    }]
 users = []
 revoked_tokens = []
 
@@ -121,8 +121,7 @@ class Sale:
 
         remainder = available_stock-quantity
         for product in products:
-            if product['product_id'] == product_id:
-                if remainder >= 0:
+            if product['product_id'] == product_id and remainder >= 0:
                     product['quantity'] = remainder
 
         if available_stock >= quantity:
