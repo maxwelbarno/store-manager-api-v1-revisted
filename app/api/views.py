@@ -22,8 +22,7 @@ def jwt_holder():
 def attendant_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        # verify_jwt_in_request()
-        jwt_holder()
+        verify_jwt_in_request()
         claims = get_jwt_claims()
         if claims['is_admin'] != False:
             return make_response(jsonify({"message": "Attendant rights required!"}), 201)
