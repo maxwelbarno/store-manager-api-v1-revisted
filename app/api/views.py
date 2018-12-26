@@ -49,7 +49,6 @@ def product_validation(product_name, category, quantity, price):
 def product_create(product_name, category, quantity, price):
     """ custom create product function """
     ValidateProduct.validate(product_name, category, quantity, price)
-    # product_validation(product_name, category, quantity, price)
     return Product.create_product(product_name, category, quantity, price)
 
 def product_update(product_name, category, quantity, price):
@@ -118,7 +117,11 @@ class Products(Resource):
         
         try:
             data = request.get_json()
-            product_create(data['product_name'], data['category'], data['quantity'], data['unit_price'])
+            product_name=data['product_name']
+            category=data['category']
+            quantity=data['quantity']
+            unit_price=data['unit_price']
+            product_create(product_name, category, quantity, unit_price)
             
             return make_response(jsonify(), 201)
         except KeyError as error:
