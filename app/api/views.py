@@ -48,7 +48,8 @@ def product_validation(product_name, category, quantity, price):
 
 def product_create(product_name, category, quantity, price):
     """ custom create product function """
-    product_validation(product_name, category, quantity, price)
+    ValidateProduct.validate(product_name, category, quantity, price)
+    # product_validation(product_name, category, quantity, price)
     return Product.create_product(product_name, category, quantity, price)
 
 def product_update(product_name, category, quantity, price):
