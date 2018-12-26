@@ -64,13 +64,11 @@ def product_sale(product_id, quantity):
     """ custom product sale """
     validate_sale(product_id, quantity)
     return Sale.make_sale(product_id, quantity)
-
             
 def error_handling(error):
     """ key error handling """
     error = error
     return make_response(jsonify({"message":"{} key missing".format(str(error))}), 400)
-
 
 class Register(Resource):
     """ User registration """
