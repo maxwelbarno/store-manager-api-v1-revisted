@@ -2,9 +2,13 @@ language: python
 python:
   - "3.6.7"
 
+env:
+  - CODECOV_TOKEN="39325344-cd5a-42b1-9925-d79a79fc43d9"
+  
 # install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install codecov
 # command to run tests
 
 # run pytest and coveralls script
@@ -14,3 +18,4 @@ script:
 # then post the results to coveralls
 after_success:
   - coveralls
+  - codecov
