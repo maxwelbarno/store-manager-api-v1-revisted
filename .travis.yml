@@ -4,6 +4,9 @@ python:
 
 env:
   - CODECOV_TOKEN="39325344-cd5a-42b1-9925-d79a79fc43d9"
+
+notifications:
+  email: false
   
 # install dependencies
 install:
