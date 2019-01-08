@@ -1,4 +1,4 @@
-aniso8601==4.0.1
+aniso8601==4.1.0
 atomicwrites==1.2.1
 attrs==18.2.0
 autopep8==1.4.3
