@@ -1,7 +1,7 @@
 aniso8601==4.0.1
 atomicwrites==1.2.1
 attrs==18.2.0
-autopep8==1.4.3
+autopep8==1.4.4
 certifi==2018.11.29
 chardet==3.0.4
 Click==7.0
